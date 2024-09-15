@@ -1,0 +1,28 @@
+version: '3'
+services:
+  express:
+    container_name: api-image
+    build:
+      context: ../api
+      dockerfile: ../api/Dockerfile
+    ports:
+      - 8081:8080
+    networks:
+      - copy-network
+  next:
+    container_name: web-image
+    build:
+      context: ../web
+      dockerfile: ../web/Dockerfile
+    ports:
+     - 3001:3000
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api-image:8080
+    networks:
+      - copy-network
+    depends_on:
+      - express
+
+networks:
+  copy-network:
+    driver: bridge
