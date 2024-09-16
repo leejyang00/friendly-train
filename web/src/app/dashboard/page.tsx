@@ -1,19 +1,24 @@
-async function Dashboard() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  console.log("API URL:", apiUrl);
+import Link from "next/link";
 
-  const res = await fetch(
-    // `http://api-image:8081/api/home`,
-    `${apiUrl}/api/home`,
-    {
-      cache: "no-store",
-    }
-  );
+async function Dashboard() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/home`, {
+    cache: "no-store",
+  });
 
   const data = await res.json();
 
   return (
-    <div>
+    <div className="flex flex-col items-center pt-3 min-h-screen">
+      <div
+        className="
+        underline
+        text-blue-600
+        hover:text-blue-800
+        visited:text-purple-600"
+      >
+        <Link href="/">Home</Link>
+      </div>
+      <h1 className="text-6xl font-bold">Dashboard - SSR</h1>
       <h1>server-side</h1>
       <pre>{JSON.stringify(data, null, 2)}</pre>
       <div>yoo </div>

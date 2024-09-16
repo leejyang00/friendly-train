@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+import { ProductListSchema } from "@shared/products/schemas";
 
 const stripe = require("stripe")(process.env.SECRET_KEY);
 const app = express();
 const PORT = 8080;
 
-const YOUR_DOMAIN = 'http://localhost:3000';
+const YOUR_DOMAIN = "http://localhost:3000";
 
 app.use(cors());
 
@@ -29,6 +30,21 @@ app.post("/create-checkout-session", async (req, res) => {
   });
 
   res.redirect(303, session.url);
+});
+
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await stripe.products.list({ active: true });
+    const validatedData = ProductListSchema.parse(products);
+
+    console.log(validatedData.data, 'data');
+
+    
+
+    res.json(validatedData);
+  } catch (err) {
+    res.status(400).json({ errors: err });
+  }
 });
 
 app.listen(PORT, () => {
