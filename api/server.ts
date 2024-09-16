@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-import { ProductListSchema } from "@shared/products/schemas";
+import { ProductListSchema, PriceSchema } from "@shared/products/schemas";
 
 const stripe = require("stripe")(process.env.SECRET_KEY);
 const app = express();
@@ -35,13 +35,34 @@ app.post("/create-checkout-session", async (req, res) => {
 app.get("/api/products", async (req, res) => {
   try {
     const products = await stripe.products.list({ active: true });
-    const validatedData = ProductListSchema.parse(products);
+    const validatedData = ProductListSchema.safeParse(products);
 
-    console.log(validatedData.data, 'data');
+    if (!validatedData.success) {
+      // return error that can't retrieve product list
+      return res.status(400).json({ errors: "list not retrievable" });
+    }
 
-    
+    const data = validatedData.data.data;
 
-    res.json(validatedData);
+    let filteredData = [];
+
+    for (var item of data) {
+      const price = await stripe.prices.retrieve(item.default_price);
+      const priceChecked = PriceSchema.safeParse(price);
+
+      if (!priceChecked.success) {
+        // return error can't retrieve price object
+        return res.status(400).json({ errors: "price not retrievable" });
+      }
+
+      filteredData.push({
+        price: priceChecked.data.unit_amount,
+        productName: item.name,
+        images: item.images
+      });
+    }
+
+    res.json(filteredData);
   } catch (err) {
     res.status(400).json({ errors: err });
   }
