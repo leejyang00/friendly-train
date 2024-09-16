@@ -18,7 +18,7 @@ function Home() {
             className="underline text-blue-600  hover:text-blue-800 visited:text-purple-600"
             style={{ cursor: "pointer" }}
           >
-            <Link href="/">Home</Link>
+            <Link href="/">Homie</Link>
           </li>
           <li
             className="underline text-blue-600  hover:text-blue-800 visited:text-purple-600"
