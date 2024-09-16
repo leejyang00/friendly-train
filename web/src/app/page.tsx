@@ -9,7 +9,7 @@ function Home() {
       <h1 className="text-6xl font-bold">Welcome to Home Page</h1>
       <p className="mt-2 text-xl font-medium">
         08 Sept 2024 - Directory to the multiple pages for payments using
-        Stripe.
+        Stripe for test
       </p>
 
       <div>
