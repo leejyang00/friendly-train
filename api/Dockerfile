@@ -8,6 +8,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+COPY ../shared /app/shared
 
 # Stage 2: Production
 FROM node:20-alpine

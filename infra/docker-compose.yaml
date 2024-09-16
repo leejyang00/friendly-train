@@ -1,10 +1,9 @@
-version: '3'
 services:
   express:
     container_name: api-image
     build:
-      context: ../api
-      dockerfile: ../api/Dockerfile
+      context: ../
+      dockerfile: api/Dockerfile
     ports:
       - 8081:8080
     networks:
@@ -12,8 +11,8 @@ services:
   next:
     container_name: web-image
     build:
-      context: ../web
-      dockerfile: ../web/Dockerfile
+      context: ../
+      dockerfile: web/Dockerfile
     ports:
      - 3001:3000
     environment:
